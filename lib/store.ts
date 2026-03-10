@@ -9,7 +9,7 @@ import type { MessageEntry, BehavioralProfile } from "./behavioral-profiler"
 let client: MongoClient | null = null
 let db: Db | null = null
 
-async function getDb(): Promise<Db> {
+export async function getDb(): Promise<Db> {
   if (db) return db
   const uri = process.env.MONGODB_URI
   if (!uri) throw new Error("MONGODB_URI not set in .env.local")

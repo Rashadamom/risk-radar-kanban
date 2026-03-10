@@ -1,6 +1,7 @@
 // Seed data for demo — realistic Indian IT staffing candidates
 import { processCandidate, type CandidateIntake } from "./scoring"
 import {
+  getDb,
   upsertCandidate,
   upsertReviewQueue,
   appendStageUpdate,
@@ -204,6 +205,16 @@ const DEMO_CANDIDATES: CandidateIntake[] = [
 ]
 
 export async function seedDemoData() {
+  // Clear all collections before seeding to prevent duplicates
+  const db = await getDb()
+  await Promise.all([
+    db.collection("candidate_master").deleteMany({}),
+    db.collection("review_queue").deleteMany({}),
+    db.collection("stage_updates").deleteMany({}),
+    db.collection("messages").deleteMany({}),
+    db.collection("behavioral_profiles").deleteMany({}),
+  ])
+
   let seeded = 0
   for (const intake of DEMO_CANDIDATES) {
     const scored = processCandidate(intake)
